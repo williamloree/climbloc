@@ -1,14 +1,25 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 
+interface Hold {
+  x: number
+  y: number
+  actualX: number
+  actualY: number
+  type: 'start' | 'normal' | 'finish'
+  order: number
+}
+
 interface Route {
   id: string
   name: string
   difficulty: string
   description: string
   originalImagePath: string
-  holds: any[]
+  holds: Hold[]
+  opener: string
   createdAt: string
+  updatedAt?: string
   stats: {
     totalHolds: number
     startHolds: number
@@ -63,6 +74,33 @@ export async function getRouteById(id: string): Promise<Route | null> {
   } catch (error) {
     console.error('Erreur lors de la recherche:', error)
     return null
+  }
+}
+
+export async function getRoutesByOpener(opener: string): Promise<Route[]> {
+  try {
+    const routes = await getRoutes()
+    return routes.filter(route => route.opener === opener)
+  } catch (error) {
+    console.error('Erreur lors de la recherche par ouvreur:', error)
+    return []
+  }
+}
+
+export async function updateRoute(id: string, updatedRoute: Route): Promise<void> {
+  try {
+    const routes = await getRoutes()
+    const routeIndex = routes.findIndex(route => route.id === id)
+    
+    if (routeIndex === -1) {
+      throw new Error('Route non trouvée')
+    }
+    
+    routes[routeIndex] = updatedRoute
+    await fs.writeFile(DB_PATH, JSON.stringify(routes, null, 2))
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour:', error)
+    throw new Error('Impossible de mettre à jour la voie')
   }
 }
 

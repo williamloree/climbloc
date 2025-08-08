@@ -14,7 +14,7 @@ export async function saveOriginalImage(imageData: string): Promise<string> {
     
     // Optimiser l'image avec Sharp
     await sharp(imageBuffer)
-      .jpeg({ quality: 85 })
+      .jpeg({ quality: 85, progressive: true })
       .resize(1920, 1080, { 
         fit: 'inside', 
         withoutEnlargement: true 

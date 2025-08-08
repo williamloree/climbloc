@@ -3,17 +3,26 @@ import sharp from 'sharp'
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    const { name, difficulty, description, imageData, holds } = body
+    const { name, difficulty, description, imageData, holds, opener } = body
 
     // Validation des données
-    if (!name || !difficulty || !imageData || !holds) {
+    if (!name || !difficulty || !imageData || !holds || !opener) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Données manquantes (name, difficulty, imageData, holds requis)'
+        statusMessage: 'Données manquantes (name, difficulty, imageData, holds, opener requis)'
       })
     }
 
-    // Sauvegarde de l'image originale uniquement
+    // Validation de l'ouvreur
+    const validOpeners = ["Will", "Joye", "Max"]
+    if (!validOpeners.includes(opener)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Ouvreur invalide. Doit être Will, Joye ou Max'
+      })
+    }
+
+    // Sauvegarde de l'image originale
     const originalImagePath = await saveOriginalImage(imageData)
     
     // Création de l'objet route
@@ -24,6 +33,7 @@ export default defineEventHandler(async (event) => {
       description: description || '',
       originalImagePath,
       holds,
+      opener,
       createdAt: new Date().toISOString(),
       stats: {
         totalHolds: holds.length,
@@ -39,7 +49,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       data: route,
-      message: 'Voie créée avec succès'
+      message: `Voie "${name}" créée avec succès par ${opener}`
     }
   } catch (error) {
     console.error('Erreur lors de la création:', error)

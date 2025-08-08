@@ -13,6 +13,14 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Validation du nom de fichier pour éviter les attaques de traversée de chemin
+    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Nom de fichier invalide'
+      })
+    }
+
     const imagePath = path.join(process.cwd(), 'storage/images', filename)
     
     // Vérifier si le fichier existe
@@ -28,6 +36,7 @@ export default defineEventHandler(async (event) => {
     // Définir les headers appropriés
     setHeader(event, 'Content-Type', getContentType(filename))
     setHeader(event, 'Cache-Control', 'public, max-age=31536000')
+    setHeader(event, 'Access-Control-Allow-Origin', '*')
 
     // Retourner le stream de l'image
     return sendStream(event, createReadStream(imagePath))

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: 'Voie supprimée avec succès'
+      message: `Voie "${route.name}" supprimée avec succès`
     }
   } catch (error) {
     console.error('Erreur lors de la suppression:', error)

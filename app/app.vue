@@ -1,14 +1,10 @@
 <template>
   <div id="app">
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'App'
-}
-</script>
 
 <style>
 /* Reset et styles globaux */
@@ -22,6 +18,8 @@ html, body {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
 }
 
 #app {

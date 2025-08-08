@@ -1,28 +1,17 @@
-// types/index.ts
-
-export interface Hold {
-  x: number
-  y: number
-  actualX: number
-  actualY: number
-  type: 'start' | 'normal' | 'finish'
-  order: number
-}
-
 export interface ClimbingRoute {
   name: string
   difficulty: string
   description: string
   src: string | null
-  holds: Hold[]
   date: string
   originalWidth: number
   originalHeight: number
   previewScale: number
+  opener: string
 }
 
 export interface HoldType {
-  key: 'start' | 'normal' | 'finish'
+  key: 'start' | 'normal' | 'foot' | 'finish'
   label: string
   emoji: string
 }
@@ -32,10 +21,12 @@ export interface RouteFormData {
   difficulty: string
   description: string
   src: string | null
-  holds: Hold[]
   originalWidth: number
   originalHeight: number
+  opener: string
 }
+
+export const OPENER_OPTIONS = ["Will","Joye","Max"]
 
 export const DIFFICULTY_OPTIONS = [
   { value: '3a', label: '3a - Très facile' },
@@ -61,5 +52,6 @@ export const DIFFICULTY_OPTIONS = [
 export const HOLD_TYPES: HoldType[] = [
   { key: 'start', label: 'Départ', emoji: '🟢' },
   { key: 'normal', label: 'Normale', emoji: '🔵' },
+  { key: 'foot', label: 'Pied', emoji: '🟣' },
   { key: 'finish', label: 'Arrivée', emoji: '🔴' }
 ] as const

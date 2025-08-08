@@ -13,7 +13,14 @@ export function getContentType(filename: string): string {
       return 'image/png'
     case 'webp':
       return 'image/webp'
+    case 'gif':
+      return 'image/gif'
     default:
       return 'application/octet-stream'
   }
+}
+
+export function isValidOpener(opener: string): boolean {
+  const validOpeners = ["Will", "Joye", "Max"]
+  return validOpeners.includes(opener)
 }
